@@ -1,6 +1,8 @@
 name: Mirror Rootfs Cache
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "30 0 * * *"
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,6 +33,8 @@ jobs:
           mkdir -p json
           sudo npm install --location=global json || true
           
+          LATEST=$(gh release list --repo github.com/armbian/cache 2>/dev/null -L 1 | awk '{ print $3 }' | sed "s/#//g")
+
           gh release view ${LATEST} --repo github.com/tuxwall/cache || gh release create ${LATEST} -R https://github.com/tuxwall/cache
         
           gh release view --json assets --repo github.com/armbian/cache 2>/dev/null | python3 -mjson.tool | sed '1,2d;$d' | json -ga name > a

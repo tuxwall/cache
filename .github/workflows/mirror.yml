@@ -35,7 +35,7 @@ jobs:
           
           LATEST=$(gh release list --repo github.com/armbian/cache 2>/dev/null -L 1 | awk '{ print $3 }' | sed "s/#//g")
 
-          gh release view ${LATEST} --repo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/ || gh release create ${LATEST} -R https://github.com/tuxwall/cache
+          gh release view ${LATEST} --repo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/ || gh release create ${LATEST} -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/
         
           gh release view --json assets --repo github.com/armbian/cache 2>/dev/null | python3 -mjson.tool | sed '1,2d;$d' | json -ga name > a
           gh release view --json assets --repo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/ 2>/dev/null | python3 -mjson.tool | sed '1,2d;$d' | json -ga name > b
